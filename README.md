@@ -16,3 +16,5 @@ Antes de executar o projeto, você precisará ter instalado:
    ```bash
    git clone https://github.com/seu-usuario/chat-app.git
    cd chat-app
+   npm i
+   npm run start-wio
