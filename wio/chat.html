@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat SocketIO</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f7f7;
+        }
+
+        .chat-container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            display: flex;
+            height: 500px; 
+            flex-direction: column;
+        }
+
+        .chat-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .chat-messages {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            border-bottom: 1px solid #ddd;
+            max-height: 380px; 
+        }
+
+        .chat-messages ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .chat-messages li {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            max-width: 70%;
+            clear: both;
+        }
+
+        /* Estilo para as mensagens de outros usuários (esquerda) */
+        .other-message {
+            background-color: #f1f1f1;
+            float: left;
+        }
+
+        /* Estilo para as suas mensagens (direita) */
+        .my-message {
+            background-color: #4CAF50;
+            color: white;
+            float: right;
+        }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background-color: #fafafa;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-right: 10px;
+        }
+
+        .chat-input button {
+            padding: 10px 15px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .chat-input button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Chat</h1>
+        </div>
+        <div class="chat-messages">
+            <ul></ul>
+        </div>
+        <div class="chat-input">
+            <input type="text" placeholder="Digite sua mensagem...">
+            <button onclick="enviar()">Enviar</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.5/socket.io.js"></script>
+    <script>
+        const socket = io("https://effective-space-succotash-7gv9wpqvrp6fr6w4-3001.app.github.dev/");
+        const username = localStorage.getItem("username");
+
+        if (!username) {
+            // Redireciona para login se o usuário não estiver definido
+            window.location.href = "/"; 
+        }
+
+        socket.on("connect", () => {
+            console.log("Conectado ao servidor");
+        });
+
+        socket.on("message", (msg) => {
+            const ul = document.querySelector("ul");
+            const li = document.createElement("li");
+
+            if (msg.username === username) {
+                li.className = "my-message"; 
+            } else {
+                li.className = "other-message"; 
+            }
+            
+            if (li.className === "my-message") {
+                li.innerHTML = `${msg.text}`;
+                ul.appendChild(li);
+            } else {
+                li.innerHTML = `${msg.username}: ${msg.text}`;
+                ul.appendChild(li);
+            }
+
+
+
+            ul.scrollTop = ul.scrollHeight;
+        });
+
+        function enviar() {
+            const msgInput = document.querySelector("input");
+            const messageText = msgInput.value.trim(); // Capture o valor da mensagem
+
+            if (messageText) {
+                // Emite a mensagem com username e text
+                socket.emit("message", { username: username, text: messageText });
+                msgInput.value = ""; // Limpa o campo de entrada
+            } else {
+                alert("Por favor, digite uma mensagem antes de enviar.");
+            }
+        }
+
+        document.querySelector("input").addEventListener("keydown", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault(); // Previne o envio do formulário se houver
+                enviar(); // Chama a função enviar
+            }
+        });
+    </script>
+</body>
+</html>
