@@ -4,6 +4,7 @@ const { Server } = require("socket.io");
 const path = require("path");
 const axios = require('axios');
 const cors = require('cors');
+const { link } = require("fs");
 require('dotenv').config();
 
 const app = express();
@@ -130,26 +131,55 @@ app.post('/gatos', async (req, res) => {
 });
 app.post('/cachorro', async (req, res) => {
     try {
-        // Requisição GET para buscar imagem na The Cat API
-        const response = await axios.get('https://api.thecatapi.com/v1/images/search');
+        // Requisição GET para buscar imagem na API de cachorros
+        const response = await axios.get('https://dog.ceo/api/breeds/image/random');
 
-        // Extraindo a URL, largura e altura da imagem
-        const catData = response.data[0];
-        const catImageInfo = {
-            id: catData.id,
-            url: catData.url,
-            width: catData.width,
-            height: catData.height
+        const dogImageInfo = {
+            url: response.data.message,
+            status: response.data.status 
         };
 
-        console.log(catImageInfo); // Log para ver o retorno da API
-        res.json(catImageInfo); // Enviando os dados da imagem como resposta
+        console.log(dogImageInfo); // Log para verificar o retorno da API
+        res.json(dogImageInfo); // Enviando a URL da imagem como resposta
     } catch (error) {
-        console.error('Erro ao buscar imagem:', error.response ? error.response.data : error.message);
-        res.status(500).json({ error: "Erro ao buscar imagem de gato" });
+        console.error('Erro ao buscar imagem de cachorro:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: "Erro ao buscar imagem de cachorro" });
     }
 });
+app.post('/raposa', async (req, res) => {
+    try {
+        // Requisição GET para buscar imagem na API de raposas
+        const response = await axios.get('https://randomfox.ca/floof/');
 
+        const foxImageInfo = {
+            image: response.data.image,
+            link: response.data.link
+        };
+
+        console.log(foxImageInfo); // Log para verificar o retorno da API
+        res.json(foxImageInfo); // Enviando a URL da imagem e o link como resposta JSON
+    } catch (error) {
+        console.error('Erro ao buscar imagem de raposa:', error.response ? error.response.data : error.message);
+        res.status(500).json({ error: "Erro ao buscar imagem de raposa" });
+    }
+});
+app.post('/buscar-pokemon', async (req, res) => {
+    const { name } = req.body;
+
+    try {
+        // Faz a requisição GET à PokéAPI com o nome do Pokémon
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
+        const pokemonData = {
+            name: response.data.name,
+            image: response.data.sprites.front_shiny
+        };
+
+        res.json(pokemonData);
+    } catch (error) {
+        console.error('Erro ao buscar o Pokémon:', error.message);
+        res.status(404).json({ error: 'Pokémon não encontrado' });
+    }
+});
 // Iniciar o servidor
 server.listen(port, () => {
     console.log(`Servidor rodando na porta: ${port}`);

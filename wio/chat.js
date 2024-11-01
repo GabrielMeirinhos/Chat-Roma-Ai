@@ -87,6 +87,42 @@ async function enviarParaApiGatos() {
         return "Desculpe, não consegui buscar uma imagem de gato.";
     }
 }
+async function enviarParaApiCachorros() {
+    try {
+        const response = await fetch("https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/cachorro", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description: "Solicitação de imagem de cachorro" })
+        });
+
+        if (!response.ok) throw new Error("Erro na requisição da API de cachorros");
+        
+        const data = await response.json();
+        return data.url; // Retorna a URL da imagem recebida da API
+    } catch (error) {
+        console.error("Erro ao buscar imagem de cachorro:", error);
+        return "Desculpe, não consegui buscar uma imagem de cachorro.";
+    }
+}
+async function enviarParaApiRaposa() {
+    try {
+        const response = await fetch("https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/raposa", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ description: "Solicitação de imagem de raposa" })
+        });
+
+        if (!response.ok) throw new Error("Erro na requisição da API de raposa");
+        
+        const data = await response.json();
+        console.log(data)
+        console.log(data.image)
+        return data.image; // Retorna a URL da imagem recebida da API
+    } catch (error) {
+        console.error("Erro ao buscar imagem de cachorro:", error);
+        return "Desculpe, não consegui buscar uma imagem de raposa.";
+    }
+}
 
 // Função principal para enviar mensagens ao servidor
 async function enviar() {
@@ -105,6 +141,12 @@ async function enviar() {
         } else if (messageText.includes("GATOS")) {
             const imagemURL = await enviarParaApiGatos();
             socket.emit("message", { username: "Gato", text: imagemURL });
+        } else if (messageText.includes("CACHORROS")) {
+            const imagemURL = await enviarParaApiCachorros();
+            socket.emit("message", { username: "Cachorro", text: imagemURL });
+        } else if (messageText.includes("RAPOSAS")) {
+            const imagemURL = await enviarParaApiRaposa();
+            socket.emit("message", { username: "Raposa", text: imagemURL });
         } else {
             socket.emit("message", { username: username, text: messageText });
         }
