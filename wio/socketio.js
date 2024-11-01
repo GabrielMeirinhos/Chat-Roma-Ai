@@ -43,6 +43,8 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "login.html"));
 });
 
+app.use("/sons", express.static(path.join(__dirname, "sons")));
+
 app.get("/chat", (req, res) => {
     res.sendFile(path.join(__dirname, "chat.html"));
 });
@@ -82,6 +84,27 @@ app.post('/openai/chat', async (req, res) => {
     }
 });
 
+app.post('/buscar-pokemon', async (req, res) => {
+    const { name } = req.body;
+
+    try {
+        // Verifica se o nome foi fornecido
+        if (!name) {
+            return res.status(400).json({ error: 'Nome do Pokémon é necessário' });
+        }
+
+        // Faz a requisição GET à PokéAPI com o nome do Pokémon
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
+        const pokemonData = {
+            name: response.data.name,
+            image: response.data.sprites.front_shiny
+        };
+        res.json({ url: pokemonData.image });
+    } catch (error) {
+        console.error('Erro ao buscar o Pokémon:', error.message);
+        res.status(404).json({ error: 'Pokémon não encontrado' });
+    }
+});
 // Rota para interagir com a API do OpenAI para geração de imagens
 app.post('/openai/image', async (req, res) => {
     const imageDescription = req.body.description;
@@ -161,23 +184,6 @@ app.post('/raposa', async (req, res) => {
     } catch (error) {
         console.error('Erro ao buscar imagem de raposa:', error.response ? error.response.data : error.message);
         res.status(500).json({ error: "Erro ao buscar imagem de raposa" });
-    }
-});
-app.post('/buscar-pokemon', async (req, res) => {
-    const { name } = req.body;
-
-    try {
-        // Faz a requisição GET à PokéAPI com o nome do Pokémon
-        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
-        const pokemonData = {
-            name: response.data.name,
-            image: response.data.sprites.front_shiny
-        };
-
-        res.json(pokemonData);
-    } catch (error) {
-        console.error('Erro ao buscar o Pokémon:', error.message);
-        res.status(404).json({ error: 'Pokémon não encontrado' });
     }
 });
 // Iniciar o servidor

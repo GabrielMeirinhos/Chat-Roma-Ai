@@ -20,9 +20,10 @@ socket.on("message", (msg) => {
     // Define a classe da mensagem para distinguir mensagens enviadas pelo usuário
     li.className = msg.username === username ? "my-message" : "other-message";
 
-    // Verifica se a mensagem é uma URL de imagem
-    if (msg.text.includes(".png") || msg.text.includes(".jpg")) {
-        // Renderiza a mensagem coo imagem
+    // Verifica se a mensagem é uma URL de som e exibe o link para o áudio
+    if (msg.text.includes(".mp3")) {
+        li.innerHTML = `${msg.username}: <audio controls src="${msg.text}"></audio>`;
+    } else if (msg.text.includes(".png") || msg.text.includes(".jpg")) {
         li.innerHTML = msg.username === username ? 
             `<img src="${msg.text}" alt="Imagem gerada">` : 
             `${msg.username}: <img src="${msg.text}" alt="Imagem gerada">`;
@@ -34,6 +35,7 @@ socket.on("message", (msg) => {
     ul.appendChild(li);
     ul.scrollTop = ul.scrollHeight;
 });
+
 
 // Função para enviar mensagem de texto para a API ChatGPT no backend
 async function enviarParaAPImensagem(mensagem) {
@@ -68,6 +70,24 @@ async function enviarParaAPIimagem(descricao) {
         return "Desculpe, não consegui processar sua solicitação.";
     }
 }
+async function enviarParaAPIPokemon(nome) {
+    try {
+        const response = await fetch("https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/buscar-pokemon", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name: nome }) // Envia o nome do Pokémon
+        });
+
+        if (!response.ok) throw new Error("Pokémon não encontrado");
+
+        const data = await response.json();
+        return data.url; // Retorna a URL da imagem do Pokémon
+    } catch (error) {
+        console.error("Erro ao buscar Pokémon:", error);
+        return null; // Retorna null em caso de erro
+    }
+}
+
 
 // Função para enviar uma solicitação para a API de gatos
 async function enviarParaApiGatos() {
@@ -124,12 +144,47 @@ async function enviarParaApiRaposa() {
     }
 }
 
+// Função para tocar som a partir de uma URL
+function tocarSom(url) {
+    const audio = new Audio(url);
+    audio.play();
+}
+
+// Mapeamento de comandos para URLs de sons
+const sons = {
+    "gato mia": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/gato.mp3",
+    "auau": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/cachorro.mp3",
+    "galinha": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/galinha.mp3",
+    "muh": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/vaca.mp3",
+
+    "suspense" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/dun.mp3",
+    "bom dia" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/bomdia.mp3",
+    "peido" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/peido.mp3",
+    "faz o l" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/lulinha.mp3",
+
+};
+
+// Função para verificar e tocar som
+function verificarComandoESom(messageText) {
+    for (const comando in sons) {
+        if (messageText.includes(comando)) {
+            tocarSom(sons[comando]);
+            break;
+        }
+    }
+}
+
+
 // Função principal para enviar mensagens ao servidor
 async function enviar() {
     const msgInput = document.querySelector("input");
     const messageText = msgInput.value.trim();
 
     if (messageText) {
+
+        verificarComandoESom(messageText);
+
+
         if (messageText.startsWith("/text ")) {
             const mensagem = messageText.slice(6);
             const resposta = await enviarParaAPImensagem(mensagem);
@@ -138,7 +193,11 @@ async function enviar() {
             const descricao = messageText.slice(7);
             const imagemURL = await enviarParaAPIimagem(descricao);
             socket.emit("message", { username: "ChatGPT", text: imagemURL });
-        } else if (messageText.includes("GATOS")) {
+        } else if (messageText.startsWith("/pokemon ")) {
+            const descricao = messageText.slice(9);
+            const imagemURL = await enviarParaAPIPokemon(descricao);
+            socket.emit("message", { username: "Pokemon", text: imagemURL });
+        }else if (messageText.includes("GATOS")) {
             const imagemURL = await enviarParaApiGatos();
             socket.emit("message", { username: "Gato", text: imagemURL });
         } else if (messageText.includes("CACHORROS")) {
@@ -147,7 +206,8 @@ async function enviar() {
         } else if (messageText.includes("RAPOSAS")) {
             const imagemURL = await enviarParaApiRaposa();
             socket.emit("message", { username: "Raposa", text: imagemURL });
-        } else {
+        }
+         else {
             socket.emit("message", { username: username, text: messageText });
         }
         msgInput.value = "";

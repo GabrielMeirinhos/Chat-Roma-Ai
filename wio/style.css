@@ -6,21 +6,21 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 100vh; /* Altura total da viewport */
     background-color: #f5f5f5;
 }
 
 /* Contêiner do chat */
 .chat-container {
-    width: 90%;
-    max-width: 600px;
+    width: 100%; /* 100% da largura disponível */
+    max-width: 800px; /* Largura máxima para evitar que fique muito largo em telas grandes */
     background-color: #ffffff; /* Fundo branco para o contêiner */
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 70vh; /* Aumentando a altura do contêiner para 70% da altura da viewport */
+    height: 100%; /* Permite que o contêiner preencha a altura do pai */
 }
 
 /* Cabeçalho do chat */
@@ -102,4 +102,13 @@ body, html {
     margin-bottom: 5px;
     text-align: left;
     transition: background-color 0.3s; /* Transição suave na mudança de cor */
+}
+
+/* Estilo para imagens dentro das mensagens */
+.my-message img,
+.other-message img {
+    max-width: 100%; /* Imagem não deve ultrapassar a largura do contêiner */
+    height: auto; /* Mantém a proporção da imagem */
+    border-radius: 5px; /* Bordas arredondadas para imagens */
+    margin-top: 5px; /* Espaçamento acima da imagem */
 }
