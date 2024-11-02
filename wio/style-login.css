@@ -10,7 +10,9 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f7f7f7;
+    background-image: url(https://img.freepik.com/fotos-gratis/pico-de-montanha-majestoso-em-paisagem-tranquila-de-inverno-gerada-por-ia_188544-15662.jpg);
+    background-size: cover;
+    background-position: center;
 }
 
 .login-container {
