@@ -1,0 +1,58 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f7f7f7;
+}
+
+.login-container {
+    width: 300px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column; /* Permite que os filhos sejam empilhados verticalmente */
+    justify-content: center; /* Centraliza os itens no eixo vertical */
+    align-items: center; /* Centraliza os itens no eixo horizontal */
+}
+
+.login-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login-input {
+    width: 100%; /* Faz com que o campo de entrada ocupe toda a largura */
+    margin-bottom: 15px;
+}
+
+.login-input input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 100%; /* Faz com que o campo de entrada ocupe toda a largura */
+    margin-bottom: 10px;
+}
+
+.login-button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Faz com que o botão ocupe toda a largura */
+}
+
+.login-button:hover {
+    background-color: #45a049;
+}
