@@ -20,10 +20,7 @@ socket.on("message", (msg) => {
     // Define a classe da mensagem para distinguir mensagens enviadas pelo usuário
     li.className = msg.username === username ? "my-message" : "other-message";
 
-    // Verifica se a mensagem é uma URL de som e exibe o link para o áudio
-    if (msg.text.includes(".mp3")) {
-        li.innerHTML = `${msg.username}: <audio controls src="${msg.text}"></audio>`;
-    } else if (msg.text.includes(".png") || msg.text.includes(".jpg")) {
+    if (msg.text.includes(".png") || msg.text.includes(".jpg")) {
         li.innerHTML = msg.username === username ? 
             `<img src="${msg.text}" alt="Imagem gerada">` : 
             `${msg.username}: <img src="${msg.text}" alt="Imagem gerada">`;
@@ -161,6 +158,7 @@ const sons = {
     "bom dia" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/bomdia.mp3",
     "peido" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/peido.mp3",
     "faz o l" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/lulinha.mp3",
+    "kkk" : "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/haha.mp3",
 
 };
 
@@ -174,6 +172,10 @@ function verificarComandoESom(messageText) {
     }
 }
 
+// Escuta o evento "playSound" do servidor e toca o som para todos os usuários
+socket.on("playSound", (data) => {
+    tocarSom(data.url);
+});
 
 // Função principal para enviar mensagens ao servidor
 async function enviar() {

@@ -29,15 +29,37 @@ app.use(cors({
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Configuração do Socket.IO
 io.on("connection", (socket) => {
     console.log("Usuário conectado: " + socket.id);
+
     socket.on("message", (msg) => {
         console.log("Mensagem recebida:", msg);
+
+        // Verifica se a mensagem é um comando de som
+        const sons = {
+            "gato mia": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/gato.mp3",
+            "auau": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/cachorro.mp3",
+            "galinha": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/galinha.mp3",
+            "muh": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/vaca.mp3",
+            "suspense": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/dun.mp3",
+            "bom dia": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/bomdia.mp3",
+            "peido": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/peido.mp3",
+            "faz o l": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/lulinha.mp3",
+            "kkk": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/haha.mp3",
+        };
+
+        // Detecta e envia comando de som a todos
+        for (const comando in sons) {
+            if (msg.text.includes(comando)) {
+                io.emit("playSound", { url: sons[comando] }); // Emitir o evento de som para todos os usuários
+                return; // Sai para evitar envio adicional do mesmo som como mensagem
+            }
+        }
+
+        // Caso não seja som, emite como mensagem padrão
         io.emit("message", msg);
     });
 });
-
 // Rota de arquivos estáticos
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "login.html"));
