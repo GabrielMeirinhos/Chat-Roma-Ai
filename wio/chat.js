@@ -20,7 +20,7 @@ socket.on("message", (msg) => {
     // Define a classe da mensagem para distinguir mensagens enviadas pelo usuário
     li.className = msg.username === username ? "my-message" : "other-message";
 
-    if (msg.text.includes(".png") || msg.text.includes(".jpg")) {
+    if (msg.text.includes(".png") || msg.text.includes(".jpg") || msg.text.includes(".gif")) {
         li.innerHTML = msg.username === username ? 
             `<img src="${msg.text}" alt="Imagem gerada">` : 
             `${msg.username}: <img src="${msg.text}" alt="Imagem gerada">`;
