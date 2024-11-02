@@ -45,6 +45,7 @@ io.on("connection", (socket) => {
             "bom dia": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/bomdia.mp3",
             "peido": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/peido.mp3",
             "faz o l": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/lulinha.mp3",
+            "kkk": "https://reimagined-space-couscous-5wgq5x6g4q5cpgw7-3000.app.github.dev/sons/haha.mp3",
         };
 
         // Detecta e envia comando de som a todos
