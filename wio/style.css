@@ -4,73 +4,48 @@ body, html {
     padding: 0;
     font-family: Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     height: 100vh;
-    background-image: url('https://img.freepik.com/fotos-gratis/pico-de-montanha-majestoso-em-paisagem-tranquila-de-inverno-gerada-por-ia_188544-15662.jpg');
+    background-color: #101524;
     background-size: cover;
     background-position: center;
 }
 
-/* Portal */
-.portal {
-    position: absolute; 
-    top: 44%; 
-    left: 50%; 
-    width: 90%; 
-    height: 90%; 
-    background-image: url(''); /* Adicione sua imagem aqui */
-    background-size: contain; 
-    background-repeat: no-repeat; 
-    background-position: center; 
-    border-radius: 8px; 
-    z-index: 3; 
-    transform: translate(-50%, -50%); 
-}
-
-/* Imagem do gato */
-.cat-image {
-    position: absolute; 
-    top: 10%; 
-    left: 10%; 
-    width: 50px; 
-    height: auto; 
-    z-index: 4; 
-}
-
 /* Contêiner do chat */
 .chat-container {
-    width: 100%; 
-    max-width: 800px; 
-    background-color: rgba(255, 255, 255, 0.9); 
-    border-radius: 15px;
+    width: 100%;
+    max-width: 1495px;
+    background-color: rgba(255, 255, 255, 0.9);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    height: 70vh;
-    position: relative; 
-    z-index: 2; 
+    height: 100vh;
+    position: relative;
+    z-index: 2;
+    border-radius: 0; /* Remove bordas arredondadas do contêiner */
 }
 
 /* Cabeçalho do chat */
 .chat-header {
-    padding: 5px; /* Reduzido para diminuir a altura */
-    background-color: #007bff;
+    padding: 10px;
+    background-color: #101524;
     color: white;
     text-align: center;
-    font-size: 1.5em; /* Diminuído para um tamanho menor */
-    border-bottom: 3px solid #0056b3;
+    font-size: 1.5em;
+    flex-shrink: 0;
+    font-family: 'Sansita', sans-serif; /* Aplica a fonte Sansita */
 }
 
 /* Área de mensagens */
 .chat-messages {
-    flex-grow: 1; 
+    flex-grow: 1;
     overflow-y: auto;
     padding: 20px;
-    background-color: #f9f9f9; 
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    background-color: #101524;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
 }
 
 /* Estilo da lista de mensagens */
@@ -87,50 +62,66 @@ body, html {
     margin-bottom: 10px;
     max-width: 70%;
     clear: both;
+    word-break: break-word;
 }
 
 .my-message {
-    background-color: #d1e7dd;
-    align-self: flex-end; /* Alinha mensagens do usuário à direita */
+    background-color: #6B7597;
+    align-self: flex-end;
 }
 
 .other-message {
     background-color: #e2e3e5;
-    align-self: flex-start; /* Alinha mensagens de outros usuários à esquerda */
+    align-self: flex-start;
 }
 
 /* Área de entrada de mensagem */
 .chat-input {
     display: flex;
+    justify-content: center;
     padding: 15px;
-    background-color: #f1f1f1;
-    border-top: 1px solid #ddd;
+    background-color: #101524; /* Nova cor de fundo */
+    border-top: 1px solid #101524;
+    flex-shrink: 0;
+}
+
+/* Esconder botão por padrão */
+.chat-input button {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Transição suave da opacidade e visibilidade */
+    border-radius: 20px; /* Mantém bordas arredondadas */
+    background-color: #007bff; /* Mantém a cor azul */
+    color: white; /* Mantém a cor do texto branca */
+    margin-left: 10px;
+    padding: 15px 20px;
+    border: none;
+    cursor: pointer;
+    display: inline-block; /* Garante que o botão mantenha seu tamanho */
 }
 
 /* Estilo do campo de entrada */
 .chat-input input {
-    flex: 1;
+    width: 150px; /* Largura inicial pequena */
     padding: 15px;
-    border: 1px solid #ddd;
-    border-radius: 20px;
+    border: 1px solid #000000;
     outline: none;
-    transition: border-color 0.3s;
+    transition: width 0.3s ease; /* Transição suave */
+    border-radius: 20px;
+    background-color: #242F50; /* Nova cor de fundo do input */
+    color: white; /* Cor do texto no input */
 }
 
 .chat-input input:focus {
+    width: 45%; /* Largura quando focado */
     border-color: #007bff;
 }
 
-/* Estilo do botão de envio */
-.chat-input button {
-    margin-left: 10px;
-    padding: 15px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: background-color 0.3s, box-shadow 0.3s;
+/* Mostrar botão quando input não estiver vazio */
+.chat-input input:not(:placeholder-shown) + button {
+    opacity: 1; /* Define opacidade para visível */
+    visibility: visible; /* Define visibilidade para visível */
+    transition: background-color 0.3s, box-shadow 0.3s, opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
 }
 
 .chat-input button:hover {
