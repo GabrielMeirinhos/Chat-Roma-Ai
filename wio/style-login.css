@@ -10,14 +10,12 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url(https://img.freepik.com/fotos-gratis/pico-de-montanha-majestoso-em-paisagem-tranquila-de-inverno-gerada-por-ia_188544-15662.jpg);
-    background-size: cover;
-    background-position: center;
+    background-color: #101524; /* Cor de fundo atualizada */
 }
 
 .login-container {
     width: 300px;
-    background-color: #fff;
+    background-color: rgba(255, 255, 255, 0.9); /* Fundo semi-transparente */
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
@@ -30,6 +28,8 @@ body {
 .login-container h1 {
     text-align: center;
     margin-bottom: 20px;
+    font-family: 'Sansita', sans-serif; /* Aplica a fonte Sansita */
+    color: #101524; /* Cor do texto */
 }
 
 .login-input {
@@ -38,23 +38,32 @@ body {
 }
 
 .login-input input {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Bordas semi-transparentes */
+    border-radius: 20px;
     width: 100%; /* Faz com que o campo de entrada ocupe toda a largura */
     margin-bottom: 10px;
+    background-color: transparent; /* Fundo transparente */
+    color: #101524; /* Cor do texto */
+    outline: none;
+}
+
+.login-input input:focus {
+    border-color: #007bff; /* Cor da borda quando focado */
 }
 
 .login-button {
-    padding: 10px;
-    background-color: #4CAF50;
+    padding: 15px 20px;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
     width: 100%; /* Faz com que o botão ocupe toda a largura */
+    transition: background-color 0.3s, box-shadow 0.3s;
 }
 
 .login-button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
